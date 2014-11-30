@@ -1,0 +1,1 @@
+Open Control Panel -> Fonts.  Simply drag these fonts to the folder.

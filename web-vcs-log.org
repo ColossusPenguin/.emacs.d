@@ -1,0 +1,12 @@
+
+* 2014-11-21
+** Downloading file 20:39:06 GMT
+   file [[file:/home/david/Downloads/autostart.el][/home/david/Downloads/autostart.el]]
+   from http://bazaar.launchpad.net/~nxhtml/nxhtml/main/download/lennart.borgman%40gmail.com-20110313013000-drl16yyp60auegw9/autostart.el-20080724174035-zgon4j679232cch3-2/autostart.el
+   Done.
+
+** Downloading file 20:39:30 GMT
+   file [[file:/home/david/Downloads/autostart22.el][/home/david/Downloads/autostart22.el]]
+   from http://bazaar.launchpad.net/~nxhtml/nxhtml/main/download/lennart.borgman%40gmail.com-20100118135750-uoj5q7chz82hzazn/autostart22.el-20090101213540-jlah6xe0n65g93pw-1/autostart22.el
+   Done.
+
