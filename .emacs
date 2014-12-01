@@ -1,7 +1,18 @@
 
 
+;;;;;;;;;;;;;; Add-on Packages ;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------
+;;  Org-Mode
+;;----------------------------------------------------------
+(require 'org)
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
 
-
+(setq org-todo-keywords
+  '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+  
+  
 ;;;;;;;;;;;;;; Environment / Appearance ;;;;;;;;;;;;;;;;;;;;
 ;; Solarized Theme (FRBNY-MIKE)
 (add-to-list 'load-path "~/.emacs.d/color-theme/")
@@ -41,4 +52,27 @@
 ;; Buffer List in Current Window
 (global-set-key "\C-x\C-b" 'buffer-menu)
 
+;;;;;;;;;;;;;; Other Things ;;;;;;;;;;;;;;;;;;;;
+;;----------------------------------------------------------
+;;  Rare but useful instances of things eMacs can do
+;;----------------------------------------------------------
 
+;; Get rid of duplicate lines
+(defun uniq-lines (beg end)
+  "Unique lines in region.
+Called from a program, there are two arguments:
+BEG and END (region to sort)."
+  (interactive "r")
+  (save-excursion
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (while (not (eobp))
+        (kill-line 1)
+        (yank)
+        (let ((next-line (point)))
+          (while
+              (re-search-forward
+               (format "^%s" (regexp-quote (car kill-ring))) nil t)
+            (replace-match "" nil nil))
+          (goto-char next-line))))))
