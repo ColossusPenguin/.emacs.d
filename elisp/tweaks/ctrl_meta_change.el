@@ -7,4 +7,4 @@
 (setq ns-function-modifier 'control)
 
 ;; Change meta to command key
-(setq ns-command-modifier 'meta)
+;; (setq ns-command-modifier 'meta)

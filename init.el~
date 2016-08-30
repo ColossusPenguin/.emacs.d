@@ -163,7 +163,7 @@ BEG and END (region to sort)."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ibuffer-projectile ibuffer-vc hackernews exec-path-from-shell ein company-jedi ensime)))
+    (ibuffer-vc hackernews exec-path-from-shell ein company-jedi ensime)))
  '(show-paren-mode t)
  '(text-mode-hook (quote (longlines-mode text-mode-hook-identify))))
 (custom-set-faces
