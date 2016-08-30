@@ -1,0 +1,6 @@
+# Files to ignore when pushing/merging to Git
+
+*~
+\#*\#
+
+auto-save-list
