@@ -13,17 +13,37 @@
 (if (eq system-type 'darwin)
     (load "~/.emacs.d/tweaks/ctrl_meta_change")
   )
+;;--------------------------------------------------
+;; Initial Use-Package Install (if required)
+;;--------------------------------------------------
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+
+(package-initialize)
+
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+;;--------------------------------------------------
+
 
 ;;----------------------------------------------------------
 ;;  Commpany Mode
 ;;----------------------------------------------------------
-;; Start in 'Company Mode' by default
-(add-hook 'after-init-hook 'global-company-mode)
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :defer 2
+  :bind ("C-<tab>" . company-complete)
+  :config
+  (global-company-mode t)
+  (push 'company-rtags company-backends))
 ;;----------------------------------------------------------
 ;;  Org-Mode
 ;;----------------------------------------------------------
-
-
 (require 'org)
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
@@ -31,7 +51,14 @@
 
 (setq org-todo-keywords
   '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
-  
+
+;;----------------------------------------------------------
+;;  Emacs Speaks Statistics (ESS)
+;;----------------------------------------------------------
+(use-package ess
+	     :ensure t
+	     :init (require 'ess-site))
+
 ;;;;;;;;;;;;;; MELPA Package Manager ;;;;;;;;;;;;;;;;;;;;;;;
 (when (>= emacs-major-version 24)
   (require 'package)
