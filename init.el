@@ -1,36 +1,55 @@
 ;; Customizations to eMacs.
 
-;;;;;;;;;;;;;; Add-on Packages ;;;;;;;;;;;;;;;;;;;;
-
 ;; Added by Package.el.
 ;; This must come before configurations of installed packages.  
 (package-initialize)
 
-(let ((default-directory "~/.emacs.d/elisp/"))
-  (normal-top-level-add-subdirs-to-load-path))
-
-
-;; Hacker News eMacs Client
-(require 'hackernews)
+(add-to-list 'load-path "~/.emacs.d/elisp/")
 
 ;;;;;;;;;;;;;; Tweaks ;;;;;;;;;;;;;;;;;;;;
-;;(add-to-list 'load-path "~/.emacs.d/tweaks/")
+(add-to-list 'load-path "~/.emacs.d/tweaks/")
 
 ;; MacOS Specific Tweeks
 (if (eq system-type 'darwin)
-    (load "~/.emacs.d/elisp/tweaks/ctrl_meta_change")
+    (load "~/.emacs.d/tweaks/ctrl_meta_change")
   )
 
+;;--------------------------------------------------
+;; Initial Use-Package Install (if required)
+;;--------------------------------------------------
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+
+(package-initialize)
+
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+;;--------------------------------------------------
+
+;;----------------------------------------------------------
+;;  HackerNews
+;;----------------------------------------------------------
+(use-package hackernews
+	     :ensure t
+	     )
 ;;----------------------------------------------------------
 ;;  Commpany Mode
 ;;----------------------------------------------------------
-;; Start in 'Company Mode' by default
-(add-hook 'after-init-hook 'global-company-mode)
+(use-package company
+	     :ensure t
+	     :diminish company-mode
+	     :defer 2
+	     :bind ("C-<tab>" . company-complete)
+	     :config
+	     (global-company-mode t)
+	     )
 ;;----------------------------------------------------------
 ;;  Org-Mode
 ;;----------------------------------------------------------
-
-
 (require 'org)
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
@@ -38,7 +57,16 @@
 
 (setq org-todo-keywords
   '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
-  
+
+;;----------------------------------------------------------
+;;  Emacs Speaks Statistics (ESS)
+;;----------------------------------------------------------
+(use-package ess-site
+  :ensure ess
+  :init (setq ess-use-auto-complete 'script-only)
+  :init (require 'ess-site)
+  )
+
 ;;;;;;;;;;;;;; MELPA Package Manager ;;;;;;;;;;;;;;;;;;;;;;;
 (when (>= emacs-major-version 24)
   (require 'package)
@@ -72,7 +100,6 @@
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 (add-hook 'scala-mode-hook #'yas-minor-mode)
-  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;; Environment / Appearance ;;;;;;;;;;;;;;;;;;;;
@@ -94,6 +121,8 @@
 ;; Scroll one line at a time
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
+;; Turn off Annoying Windows chime
+(setq visible-bell 1)
 ;; Makes *scratch* empty.
 (setq initial-scratch-message "")
 
@@ -161,44 +190,11 @@ BEG and END (region to sort)."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (ibuffer-projectile ibuffer-vc hackernews exec-path-from-shell ein company-jedi ensime)))
- '(show-paren-mode t)
- '(text-mode-hook (quote (longlines-mode text-mode-hook-identify))))
+ '(package-selected-packages (quote (exec-path-from-shell ein company-jedi ensime)))
+ '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-;;Functions
-
-(defun truncate-lines ()
-  "Toggle line-truncation in current window"
-  (interactive)
-  (if (= (window-width) (frame-width))
-      (if (eq truncate-lines nil)
-          (set-variable 'truncate-lines t)
-        (set-variable 'truncate-lines nil))
-      (if (eq truncate-partial-width-windows nil)
-          (set-variable 'truncate-partial-width-windows t)
-        (set-variable 'truncate-partial-width-windows nil))))
-
-;;Functions
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;Neat or useful key bindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;"previous-window" binding
-(global-set-key "\C-xp" "\C-u\-1\C-xo")
-
-;; Change c-c c-b to use ibuffer
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
-;;; Sample emacs init file ends here
-(put 'upcase-region 'disabled nil)
-
-
-

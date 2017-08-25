@@ -13,6 +13,7 @@
 (if (eq system-type 'darwin)
     (load "~/.emacs.d/tweaks/ctrl_meta_change")
   )
+
 ;;--------------------------------------------------
 ;; Initial Use-Package Install (if required)
 ;;--------------------------------------------------
@@ -29,18 +30,23 @@
   (package-install 'use-package))
 ;;--------------------------------------------------
 
-
+;;----------------------------------------------------------
+;;  HackerNews
+;;----------------------------------------------------------
+(use-package hackernews
+	     :ensure t
+	     )
 ;;----------------------------------------------------------
 ;;  Commpany Mode
 ;;----------------------------------------------------------
 (use-package company
-  :ensure t
-  :diminish company-mode
-  :defer 2
-  :bind ("C-<tab>" . company-complete)
-  :config
-  (global-company-mode t)
-  (push 'company-rtags company-backends))
+	     :ensure t
+	     :diminish company-mode
+	     :defer 2
+	     :bind ("C-<tab>" . company-complete)
+	     :config
+	     (global-company-mode t)
+	     (push 'company-rtags company-backends))
 ;;----------------------------------------------------------
 ;;  Org-Mode
 ;;----------------------------------------------------------
@@ -55,9 +61,11 @@
 ;;----------------------------------------------------------
 ;;  Emacs Speaks Statistics (ESS)
 ;;----------------------------------------------------------
-(use-package ess
-	     :ensure t
-	     :init (require 'ess-site))
+(use-package ess-site
+	     :ensure ess
+	     :init (require 'ess-site)
+	     :init (setq ess-use-auto-complete 'script-only)
+	     )
 
 ;;;;;;;;;;;;;; MELPA Package Manager ;;;;;;;;;;;;;;;;;;;;;;;
 (when (>= emacs-major-version 24)
