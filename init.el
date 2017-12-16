@@ -50,6 +50,16 @@
 ;;----------------------------------------------------------
 ;;  Org-Mode
 ;;----------------------------------------------------------
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+;;----------------------------------------------------------
+;;  Org-Mode
+;;----------------------------------------------------------
 (require 'org)
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
@@ -58,11 +68,14 @@
 (setq org-todo-keywords
   '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
+(eval-after-load "org"
+  '(require 'ox-md nil t))
 ;;----------------------------------------------------------
 ;;  Emacs Speaks Statistics (ESS)
 ;;----------------------------------------------------------
 (use-package ess-site
   :ensure ess
+  :defer 3
   :init (setq ess-use-auto-complete 'script-only)
   :init (require 'ess-site)
   )
@@ -190,7 +203,13 @@ BEG and END (region to sort)."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (exec-path-from-shell ein company-jedi ensime)))
+ '(org-format-latex-options
+   (quote
+    (:foreground default :background default :scale 3.0 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+		 ("begin" "$1" "$" "$$" "\\(" "\\["))))
+ '(package-selected-packages
+   (quote
+    (markdown-mode exec-path-from-shell ein company-jedi ensime)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
