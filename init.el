@@ -11,7 +11,7 @@
 
 ;; MacOS Specific Tweeks
 (if (eq system-type 'darwin)
-    (load "~/.emacs.d/tweaks/ctrl_meta_change")
+    (load "~/.emacs.d/elisp/tweaks/ctrl_meta_change")
   )
 
 ;;--------------------------------------------------
@@ -106,13 +106,21 @@
 ;;;;;;;;; Load Library/Package Specific Behavior;;;;;;;;;;;;
 (load "~/.emacs.d/elisp/language_specific_mods/python.el")
 ;; Python
-(setq python-shell-interpreter "/usr/local/bin/python2.7")
+(if (eq system-type 'darwin)
+    (setq python-shell-interpreter "/Users/david/anaconda3/bin/python")
+  )
 
 ;; Scala
 ;; -  Note:  ENSIME comes from melpa.milkbox.net/packages
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 (add-hook 'scala-mode-hook #'yas-minor-mode)
+
+;; Latex
+;; Setting environment path to adhere to OSX
+(if (eq system-type 'darwin)
+    (setq exec-path (append exec-path '("/Library/TeX/texbin")))
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;; Environment / Appearance ;;;;;;;;;;;;;;;;;;;;
@@ -211,6 +219,9 @@ BEG and END (region to sort)."
    (quote
     (markdown-mode exec-path-from-shell ein company-jedi ensime)))
  '(show-paren-mode t))
+ '(python-shell-interpreter "/Users/david/anaconda3/bin/python")
+ '(show-paren-mode t)
+ '(text-mode-hook (quote (longlines-mode text-mode-hook-identify)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
