@@ -9,6 +9,20 @@
 ;;;;;;;;;;;;;; Tweaks ;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path "~/.emacs.d/tweaks/")
 
+
+;;--------------------------------------------------
+;; Segregate Windows & MacOS Settings
+;; Windows:
+;; -  Use Cygwin as default shell
+;;
+;;--------------------------------------------------
+(load-file (expand-file-name
+            (cond ((eq system-type 'windows-nt) "windows.el")
+                  ((eq system-type 'gnu/linux) "linux.el")
+		  ((eq system-type 'darwin) "macos.el")
+                  (t "default-system.el"))
+	    "~/.emacs.d/elisp/tweaks"))
+
 ;; MacOS Specific Tweeks
 (if (eq system-type 'darwin)
     (load "~/.emacs.d/elisp/tweaks/ctrl_meta_change")
@@ -37,6 +51,29 @@
 	     :ensure t
 	     )
 ;;----------------------------------------------------------
+;;  Exec-Path-From-Shell
+;;  Resolves issues where OSX and Emacs Paths work together
+;;----------------------------------------------------------
+(use-package exec-path-from-shell
+  :ensure t
+  :if (memq window-system '(mac ns x))
+  :config
+  (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
+  (exec-path-from-shell-initialize))
+
+;;----------------------------------------------------------
+;;  Jedi (Python Auto-Complete)
+;;----------------------------------------------------------
+(use-package jedi
+  :init
+  (progn
+    (setq jedi:complete-on-dot t)
+    (setq jedi:setup-keys t)
+    (add-hook 'python-mode-hook 'anaconda-mode)
+    (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+    (add-hook 'python-mode-hook 'jedi:setup))
+  :ensure t)
+;;---------------------------------------------------------
 ;;  Commpany Mode
 ;;----------------------------------------------------------
 (use-package company
@@ -217,7 +254,7 @@ BEG and END (region to sort)."
 		 ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(package-selected-packages
    (quote
-    (markdown-mode exec-path-from-shell ein company-jedi ensime)))
+    (anaconda-mode virtualenv jedi markdown-mode exec-path-from-shell ein company-jedi ensime)))
  '(show-paren-mode t))
  '(python-shell-interpreter "/Users/david/anaconda3/bin/python")
  '(show-paren-mode t)

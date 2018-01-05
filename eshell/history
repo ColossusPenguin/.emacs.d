@@ -24,3 +24,13 @@ which pip
 python
 python3
 python3.6m
+pwd
+cd ..
+which virtualenv
+which conda
+which python
+python
+python3
+conda --version
+conda
+which python
