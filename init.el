@@ -9,7 +9,12 @@
 ;;;;;;;;;;;;;; Tweaks ;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path "~/.emacs.d/tweaks/")
 
-
+;;--------------------------------------------------
+;; Personalization
+;;--------------------------------------------------
+(setq user-full-name "David Fisher Yun"
+      user-mail-address "david.yun@gatech.edu"
+      )
 ;;--------------------------------------------------
 ;; Segregate Windows & MacOS Settings
 ;; Windows:
@@ -35,6 +40,8 @@
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives
+	     '("org" . "https://orgmode.org/elpa/") t)
 
 (package-initialize)
 
@@ -95,16 +102,39 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-(require 'org)
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t)
+(use-package org
+  :mode (("\\.org$" . org-mode))
+  :ensure t
+  :config
+  (progn
+    ;; config stuff
+    (define-key global-map "\C-cl" 'org-store-link)
+    (define-key global-map "\C-ca" 'org-agenda)
+    (setq org-log-done t)
+    
+    (setq org-todo-keywords
+	  '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+    
+    (eval-after-load "or"
+      '(require 'ox-md nil t))
+    ))
 
-(setq org-todo-keywords
-  '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+;(require 'org)
 
-(eval-after-load "org"
-  '(require 'ox-md nil t))
+
+;;--------------------------------------------------
+;; MobileOrg Configuration
+;;--------------------------------------------------
+(if (eq system-type 'windows-nt)
+    ;; Set to the location of your Org files on your local system
+    (setq org-directory "D:\\Users\\David\\Dropbox (Personal)\\org")
+  ;; Set to the name of the file where new notes will be stored
+  (setq org-mobile-inbox-for-pull "D:\\Users\\David\\Dropbox (Personal)\\org\\draftsFromPhone.org")
+  
+  ;; Set to <your Dropbox root directory>/MobileOrg.
+  (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
+  )
+
 ;;----------------------------------------------------------
 ;;  Emacs Speaks Statistics (ESS)
 ;;----------------------------------------------------------
@@ -115,19 +145,6 @@
   :init (require 'ess-site)
   )
 
-;;;;;;;;;;;;;; MELPA Package Manager ;;;;;;;;;;;;;;;;;;;;;;;
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (add-to-list
-   'package-archives
-   '("melpa" . "http://melpa.org/packages/")
-   t)
-  (package-initialize)
-  (add-to-list
-   'package-archives
-   '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  (package-initialize)
-  )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;; Exec Path From Shell ;;;;;;;;;;;;;;;
@@ -252,7 +269,7 @@ BEG and END (region to sort)."
 		 ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(package-selected-packages
    (quote
-    (anaconda-mode virtualenv jedi markdown-mode exec-path-from-shell ein company-jedi ensime)))
+    (org-plus-contrib org anaconda-mode virtualenv jedi markdown-mode exec-path-from-shell ein company-jedi ensime)))
  '(show-paren-mode t))
  '(python-shell-interpreter "/Users/david/anaconda3/bin/python")
  '(show-paren-mode t)
