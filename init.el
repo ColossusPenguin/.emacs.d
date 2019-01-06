@@ -37,13 +37,15 @@
 ;; Initial Use-Package Install (if required)
 ;;--------------------------------------------------
 (require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-	     '("org" . "https://orgmode.org/elpa/") t)
-
 (package-initialize)
+(setq package-enable-at-startup nil)
+(setq package-archives
+      '(("melpa-stable" . "https://stable.melpa.org/packages/")
+			 ("melpa" . "http://melpa.org/packages/")
+			 ("marmalade"   . "http://marmalade-repo.org/packages/")
+			 ("org"         . "http://orgmode.org/elpa/")
+			 ("gnu"         . "http://elpa.gnu.org/packages/")))
+
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
@@ -68,6 +70,9 @@
   (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
   (exec-path-from-shell-initialize))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Python
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;----------------------------------------------------------
 ;;  Jedi (Python Auto-Complete)
 ;;----------------------------------------------------------
@@ -80,6 +85,20 @@
     (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
     (add-hook 'python-mode-hook 'jedi:setup))
   :ensure t)
+;;----------------------------------------------------------
+;; Elpy
+;;----------------------------------------------------------
+(use-package elpy
+  :ensure t
+  :pin melpa-stable
+
+  :init (add-hook 'python-mode-hook #'elpy-enable)
+  :config
+  ;; Start Elpy in Python mode
+  (add-hook 'python-mode-hook 'elpy-mode)
+  (add-hook 'python-mode-hook 'elpy-use-ipython)
+  (setq elpy-rpc-backend "jedi")
+  )
 ;;---------------------------------------------------------
 ;;  Commpany Mode
 ;;----------------------------------------------------------
@@ -91,6 +110,8 @@
 	     :config
 	     (global-company-mode t)
 	     )
+
+
 ;;----------------------------------------------------------
 ;;  Org-Mode
 ;;----------------------------------------------------------
@@ -265,11 +286,11 @@ BEG and END (region to sort)."
  ;; If there is more than one, they won't work right.
  '(org-format-latex-options
    (quote
-    (:foreground default :background default :scale 3.0 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+    (:foreground default :background default :scale 1.5 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
 		 ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(package-selected-packages
    (quote
-    (org-plus-contrib org anaconda-mode virtualenv jedi markdown-mode exec-path-from-shell ein company-jedi ensime)))
+    (0blayout jedi-direx rope-read-mode elpy anaconda-mode markdown-mode exec-path-from-shell ein ensime)))
  '(show-paren-mode t))
  '(python-shell-interpreter "/Users/david/anaconda3/bin/python")
  '(show-paren-mode t)
