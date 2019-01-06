@@ -9,7 +9,12 @@
 ;;;;;;;;;;;;;; Tweaks ;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path "~/.emacs.d/tweaks/")
 
-
+;;--------------------------------------------------
+;; Personalization
+;;--------------------------------------------------
+(setq user-full-name "David Fisher Yun"
+      user-mail-address "david.yun@gatech.edu"
+      )
 ;;--------------------------------------------------
 ;; Segregate Windows & MacOS Settings
 ;; Windows:
@@ -117,31 +122,39 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
-;;----------------------------------------------------------
-;;  Org-Mode
-;;----------------------------------------------------------
-(require 'org)
-(require 'ox-latex)
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t)
 
-(setq org-todo-keywords
-  '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+(use-package org
+  :mode (("\\.org$" . org-mode))
+  :ensure t
+  :config
+  (progn
+    ;; config stuff
+    (define-key global-map "\C-cl" 'org-store-link)
+    (define-key global-map "\C-ca" 'org-agenda)
+    (setq org-log-done t)
+    
+    (setq org-todo-keywords
+	  '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+    
+    (eval-after-load "or"
+      '(require 'ox-md nil t))
+    ))
 
-(eval-after-load "org"
-  '(require 'ox-md nil t))
+;(require 'org)
 
-;; Source Code Highlighting (buffer)
-(setq org-src-fontify-natively t)
-;; Source Code Highlighting (pdf output)
 
-;; (add-to-list 'org-latex-packages-alist '("" "minted"))
-;; (setq org-latex-listings 'minted) 
-;; (setq org-latex-pdf-process
-;;       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-;;         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-;;         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+;;--------------------------------------------------
+;; MobileOrg Configuration
+;;--------------------------------------------------
+(if (eq system-type 'windows-nt)
+    ;; Set to the location of your Org files on your local system
+    (setq org-directory "D:\\Users\\David\\Dropbox (Personal)\\org")
+  ;; Set to the name of the file where new notes will be stored
+  (setq org-mobile-inbox-for-pull "D:\\Users\\David\\Dropbox (Personal)\\org\\draftsFromPhone.org")
+  
+  ;; Set to <your Dropbox root directory>/MobileOrg.
+  (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
+  )
 
 ;;----------------------------------------------------------
 ;;  Emacs Speaks Statistics (ESS)
@@ -153,19 +166,6 @@
   :init (require 'ess-site)
   )
 
-;;;;;;;;;;;;;; MELPA Package Manager ;;;;;;;;;;;;;;;;;;;;;;;
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (add-to-list
-   'package-archives
-   '("melpa" . "http://melpa.org/packages/")
-   t)
-  (package-initialize)
-  (add-to-list
-   'package-archives
-   '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  (package-initialize)
-  )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;; Exec Path From Shell ;;;;;;;;;;;;;;;

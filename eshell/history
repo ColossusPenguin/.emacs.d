@@ -30,4 +30,22 @@ pwd
 ls -l
 cd .emacs.d/
 pwd
+pwd
 which python
+which python3
+which conda
+conda list
+echo $PATH
+which Python
+python
+python.exe
+jobs
+which python
+which py
+which python3
+cd ~
+ls
+pwd
+/Users/david/Anaconda3/python
+/Users/david/Anaconda3/python3
+/Users/david/Anaconda3/python.exe
