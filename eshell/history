@@ -30,3 +30,4 @@ pwd
 ls -l
 cd .emacs.d/
 pwd
+which python

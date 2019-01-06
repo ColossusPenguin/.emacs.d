@@ -15,18 +15,22 @@
   )
 
 ;;----------------------------------------------------------
-;;  Commpany Mode
+;;  Commpany Mode Jedi
+;;  Uninstalled 11/21/2018 because pain in the ass to work
+;;  with
 ;;----------------------------------------------------------
 ;; Start in 'Company Mode' by default
 (add-hook 'after-init-hook 'global-company-mode)
 
 (use-package company-jedi ;;; company-mode completion back-end for Python JEDI
   :config
-  (setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
   (add-hook 'python-mode-hook 'jedi:setup)
   (setq jedi:complete-on-dot t)
   (setq jedi:use-shortcuts t)
-  (setq jedi:environment-root "jedi")
+  (custom-set-variables
+   '(setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
+   '(setq jedi:environment-root "jedi"))
+  (require 'jedi-core)
   (defun config/enable-company-jedi ()
     (add-to-list 'company-backends 'company-jedi))
   (add-hook 'python-mode-hook 'config/enable-company-jedi))
@@ -69,7 +73,7 @@
 ;;;;;;;;; Load Library/Package Specific Behavior;;;;;;;;;;;;
 (load "~/.emacs.d/elisp/language_specific_mods/python.el")
 ;; Python
-(setq python-shell-interpreter "/Users/david/anaconda3/bin/python")
+(setq python-shell-interpreter "/usr/local/bin/python")
 
 ;; Scala
 ;; -  Note:  ENSIME comes from melpa.milkbox.net/packages
